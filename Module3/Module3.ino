@@ -18,8 +18,8 @@ Adafruit_HT1632LEDMatrix matrix = Adafruit_HT1632LEDMatrix(HT_DATA, HT_WR, HT_CS
 
 uint8_t target_tlc_x = 6;
 uint8_t target_tlc_y = 0;
-uint16_t cursor_x = 0;
-uint16_t cursor_y = 0;
+uint16_t cursor_tlc_x = 0;
+uint16_t cursor_tlc_y = 0;
 uint8_t buttonState = 0;
 
 void setup() {
@@ -44,19 +44,23 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  /*Serial.print(target_x);
-    Serial.print(target_y);*/
+
   //matrix.clearScreen();
   //matrix.clrPixel(uint8_t(cursor_x/16)+11,uint8_t(cursor_y/16)-7);
-  matrix.clrPixel(cursor_x,cursor_y);
-  cursor_x = analogRead(5);
-  if(cursor_x<RL_MID)
-    cursor_x=((RL_MID-cursor_x)/64)+11;
+  matrix.clrPixel(cursor_tlc_x,cursor_tlc_y);
+  cursor_tlc_x = analogRead(5);
+  if(cursor_tlc_x<RL_MID)
+    cursor_tlc_x=((RL_MID-cursor_tlc_x)/64)+11;
   else
-    cursor_x=11-((cursor_x-RL_MID)/64);
-  cursor_y = 0;//analogRead(4);
-  matrix.setPixel(cursor_x,cursor_y);
-  //matrix.setPixel(uint8_t(cursor_x/16)+11,uint8_t(cursor_y/16)-7);
+    cursor_tlc_x=11-((cursor_tlc_x-RL_MID)/64);
+
+  cursor_tlc_y = analogRead(4);
+  if(cursor_tlc_y<UD_MID)                       //UP
+    cursor_tlc_y=((cursor_tlc_y-UD_MID)/64)+7;
+  else                                          //DOWN
+    cursor_tlc_y=7-((UD_MID-cursor_tlc_y)/64);
+  matrix.setPixel(cursor_tlc_x,cursor_tlc_y);
+  
   movement();
   /*
   buttonState = digitalRead(BUTTON);
@@ -69,8 +73,8 @@ void loop() {
 }
 
 void movement() {
-  Serial.println(cursor_x);
-  Serial.println(cursor_y);
+  Serial.println(cursor_tlc_x);
+  Serial.println(cursor_tlc_y);
   /*if(cursor_x>UD_MID)
     Serial.print("L");
   else
