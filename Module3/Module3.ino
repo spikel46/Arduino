@@ -9,8 +9,10 @@
 #define LR_IN   5
 #define UD_OUT  4
 
-//#define UD_MID 249
-//#define RL_MID 10
+#define OFFSET_X 11
+
+#define UD_MID 504
+#define RL_MID 523
 
 Adafruit_HT1632LEDMatrix matrix = Adafruit_HT1632LEDMatrix(HT_DATA, HT_WR, HT_CS);
 
@@ -46,8 +48,14 @@ void loop() {
     Serial.print(target_y);*/
   //matrix.clearScreen();
   //matrix.clrPixel(uint8_t(cursor_x/16)+11,uint8_t(cursor_y/16)-7);
+  matrix.clrPixel(cursor_x,cursor_y);
   cursor_x = analogRead(5);
-  cursor_y = analogRead(4);
+  if(cursor_x<RL_MID)
+    cursor_x=((RL_MID-cursor_x)/64)+11;
+  else
+    cursor_x=11-((cursor_x-RL_MID)/64);
+  cursor_y = 0;//analogRead(4);
+  matrix.setPixel(cursor_x,cursor_y);
   //matrix.setPixel(uint8_t(cursor_x/16)+11,uint8_t(cursor_y/16)-7);
   movement();
   /*
@@ -57,7 +65,7 @@ void loop() {
   */
   //newTarget();
   matrix.writeScreen();
-  delay(1000);
+  delay(33);
 }
 
 void movement() {
