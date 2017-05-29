@@ -50,9 +50,9 @@ void loop() {
   matrix.clrPixel(cursor_tlc_x,cursor_tlc_y);
   cursor_tlc_x = analogRead(5);
   if(cursor_tlc_x<RL_MID)
-    cursor_tlc_x=((RL_MID-cursor_tlc_x)/64)+11;
+    cursor_tlc_x=((RL_MID-cursor_tlc_x)/64)+11; //right
   else
-    cursor_tlc_x=11-((cursor_tlc_x-RL_MID)/64);
+    cursor_tlc_x=11-((cursor_tlc_x-RL_MID)/64); //left
 
   cursor_tlc_y = analogRead(4);
   if(cursor_tlc_y<UD_MID)                       //UP
